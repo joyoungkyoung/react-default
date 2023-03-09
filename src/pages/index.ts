@@ -1,4 +1,5 @@
 import Login from './Login';
 import Test from './Test';
+import TextEditor from './TextEditor';
 
-export { Login, Test };
+export { Login, Test, TextEditor };
