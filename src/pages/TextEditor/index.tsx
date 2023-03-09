@@ -1,6 +1,8 @@
 import React, { useRef, useState } from 'react';
 import { Editor } from '@toast-ui/react-editor';
 import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
+import fontSize from 'tui-editor-plugin-font-size';
+import 'tui-editor-plugin-font-size/dist/tui-editor-plugin-font-size.css';
 import 'tui-color-picker/dist/tui-color-picker.css';
 import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
 
@@ -55,6 +57,7 @@ const TextEditor = () => {
                                 preset: ['#1F2E3D', '#4c5864', '#ED7675'],
                             },
                         ],
+                        fontSize,
                     ]}
                     onChange={handleChangeHtml}
                 />
