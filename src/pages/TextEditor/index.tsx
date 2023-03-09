@@ -1,13 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Editor, Viewer } from '@toast-ui/react-editor';
+import React, { useRef, useState } from 'react';
+import { Editor } from '@toast-ui/react-editor';
 import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
 import 'tui-color-picker/dist/tui-color-picker.css';
 import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
 
 import '@toast-ui/editor/dist/toastui-editor.css';
+import { toPng } from 'html-to-image';
 
 const TextEditor = () => {
-    const [editorHtml, setEditorHtml] = useState<string>();
+    const [image, setImage] = useState<string>();
 
     const editorRef = useRef<Editor>(null);
     const toolbarItems = [
@@ -23,15 +24,18 @@ const TextEditor = () => {
     const handleChangeHtml = () => {
         const data = editorRef.current?.getInstance().getHTML();
 
-        setEditorHtml(data);
+        const node = document.getElementsByClassName('ProseMirror toastui-editor-contents');
+
+        if (node && node[0]) {
+            toPng(node[0] as HTMLElement).then((url) => {
+                console.log(url);
+                setImage(url);
+            });
+        }
     };
 
-    useEffect(() => {
-        console.log(editorHtml);
-    }, [editorHtml]);
-
     return (
-        <div style={{ display: 'flex' }}>
+        <div>
             <div style={{ padding: '30px', height: '500px' }}>
                 <Editor
                     ref={editorRef}
@@ -44,13 +48,18 @@ const TextEditor = () => {
                     usageStatistics={false}
                     toolbarItems={toolbarItems}
                     useCommandShortcut={true}
-                    plugins={[colorSyntax]}
+                    plugins={[
+                        [
+                            colorSyntax,
+                            {
+                                preset: ['#1F2E3D', '#4c5864', '#ED7675'],
+                            },
+                        ],
+                    ]}
                     onChange={handleChangeHtml}
                 />
             </div>
-            <div style={{ padding: '30px' }}>
-                <Viewer />
-            </div>
+            <div style={{ padding: '30px' }}>{image && <img src={image} />}</div>
         </div>
     );
 };
