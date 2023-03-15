@@ -1,27 +1,22 @@
 import React, { useRef, useState } from 'react';
 import { Editor } from '@toast-ui/react-editor';
-import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
-import fontSize from 'tui-editor-plugin-font-size';
-import 'tui-editor-plugin-font-size/dist/tui-editor-plugin-font-size.css';
-import 'tui-color-picker/dist/tui-color-picker.css';
-import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
-
 import '@toast-ui/editor/dist/toastui-editor.css';
 import { toPng } from 'html-to-image';
+// plugin: color-picker
+import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
+import 'tui-color-picker/dist/tui-color-picker.css';
+import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
+// i18n
+import '@toast-ui/editor/dist/i18n/ko-kr';
+
+// plugin: font-size
+import fontSizePlugin from './FontSizePlugin';
 
 const TextEditor = () => {
     const [image, setImage] = useState<string>();
 
     const editorRef = useRef<Editor>(null);
-    const toolbarItems = [
-        ['heading', 'bold', 'italic', 'strike'],
-        ['hr'],
-        ['ul', 'ol', 'task'],
-        ['table', 'link'],
-        ['image'],
-        ['code'],
-        ['scrollSync'],
-    ];
+    const toolbarItems = [['heading', 'bold', 'italic', 'strike'], ['ul', 'ol', 'indent', 'outdent'], ['table']];
 
     const handleChangeHtml = () => {
         const data = editorRef.current?.getInstance().getHTML();
@@ -50,6 +45,7 @@ const TextEditor = () => {
                     usageStatistics={false}
                     toolbarItems={toolbarItems}
                     useCommandShortcut={true}
+                    language="ko-KR"
                     plugins={[
                         [
                             colorSyntax,
@@ -57,7 +53,7 @@ const TextEditor = () => {
                                 preset: ['#1F2E3D', '#4c5864', '#ED7675'],
                             },
                         ],
-                        fontSize,
+                        fontSizePlugin,
                     ]}
                     onChange={handleChangeHtml}
                 />
